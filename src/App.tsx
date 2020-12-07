@@ -1,15 +1,25 @@
 import React , {useState} from 'react';
 import Questioncard from './components/Questioncard'
-import {fetchQuestions ,Difficulty} from './API'
+import {fetchQuestions ,Difficulty , QuestionState} from './API'
 
 const TOTAL_QUESTIONS = 10 ;
+
+type AnswerObject ={
+   question : string  ;
+   answer:    string   ;
+   correct :  boolean   ;
+   correctAnswer : string;
+
+}
+
+
 
 function App() {
 
   const [loading , setLoading ] = useState(false);
-  const [questions,setQuestions ] = useState([]);
+  const [questions,setQuestions ] = useState<QuestionState[]>([]);
   const [number , setNumber ] = useState(0);
-  const [userAnswer , setuserAnswer ] = useState([]);
+  const [userAnswer , setuserAnswer ] = useState<AnswerObject[]>([]);
   const [ score , setScore ] = useState(0);
   const [ gameover , setGameover ] = useState(true);
 
