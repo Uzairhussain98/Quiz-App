@@ -23,26 +23,42 @@ function App() {
   const [ score , setScore ] = useState(0);
   const [ gameover , setGameover ] = useState(true);
 
-  console.log(fetchQuestions(TOTAL_QUESTIONS , Difficulty.EASY ));
+  console.log(questions);
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {} ;
 
 
-  const Startquiz = async() => {}
+  const Startquiz = async() => {
+    setLoading(true);
+    setGameover(false);
+    const newQuestion = await fetchQuestions(TOTAL_QUESTIONS , Difficulty.EASY);
+    setQuestions(newQuestion);
+    setScore(0);
+    setuserAnswer([]);
+    setLoading(false);
+
+
+
+  };
   const Next = async() => {}
 
 
   return (
     <div className="App">
   <h1>Quiz App</h1>
-
+{ gameover || userAnswer.length === TOTAL_QUESTIONS ? (
   <button className="start__quiz" onClick={Startquiz}>Begin Quiz</button>
-    <h3>Score :</h3>
-
+) : null }
+{!gameover ? (
+    <h3>Score :</h3> ) : null
+} 
+  { loading ?
     <p>
       Loading
-    </p>
-    {/* <Questioncard
+    </p> : null
+}
+{!loading && !gameover ? (
+    <Questioncard
     questionNum ={number +1 }
     totalQuestion = {TOTAL_QUESTIONS}
     question = {questions[number].question}
@@ -50,10 +66,12 @@ function App() {
     userAnswer = {userAnswer ? userAnswer[number] : undefined}
     callback= {checkAnswer}
 
-    /> */}
-
+    /> ) : null
+}
+{!gameover && !loading && userAnswer.length === number  + 1 && number!= TOTAL_QUESTIONS -1 ? 
     <button className="next__q" onClick={Next} >Next</button>
-
+    : null
+}
 
     </div>
   );
