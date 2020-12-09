@@ -25,7 +25,29 @@ function App() {
 
   console.log(questions);
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {} ;
+  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+    if(!gameover){
+      const answer = e.currentTarget.value ;
+
+      const correct = questions[number].correct_answer === answer ;
+
+      if (correct) {
+        setScore(prev => prev + 1)
+      }
+
+      const AnswerObject = {
+        question : questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer,
+
+      }
+
+        setuserAnswer(prev => [...prev, AnswerObject])
+    }
+
+  } ;
 
 
   const Startquiz = async() => {
@@ -34,13 +56,25 @@ function App() {
     const newQuestion = await fetchQuestions(TOTAL_QUESTIONS , Difficulty.EASY);
     setQuestions(newQuestion);
     setScore(0);
+    setNumber(0);
     setuserAnswer([]);
     setLoading(false);
 
 
 
   };
-  const Next = async() => {}
+  const Next = async() => {
+
+    const nextQuestion = number + 1 ;
+
+    if ( nextQuestion === TOTAL_QUESTIONS){
+      setGameover(true) ;
+    }
+    else{
+      setNumber(nextQuestion);
+    }
+
+  }
 
 
   return (
@@ -50,7 +84,7 @@ function App() {
   <button className="start__quiz" onClick={Startquiz}>Begin Quiz</button>
 ) : null }
 {!gameover ? (
-    <h3>Score :</h3> ) : null
+    <h3>Score : {score}</h3> ) : null
 } 
   { loading ?
     <p>
